@@ -32,56 +32,58 @@ const resetBtnEl = document.querySelector('#reset')
 /*-------------------------------- Functions --------------------------------*/
 const response = (element) => {
     idx = Number(element.target.id)
-    if (turn === 'o' && winner === false && tie === false) {
-        if (board[idx] === 0) {
-            board[idx] = 1
-            squareEls[idx].textContent = "O"
-            if (isWin(turn)) {
-                winner = true
-            }
-            if (winner === false) {turn = 'x'}
-            turnCount++;
-            if (turnCount >= 9) {
-                tie = true;
-            }
-        } else {
-            console.log('invalid move')
-        }
-  
-    } else if (turn === 'x' && winner === false && tie === false){ //x's turn
-        if (board[idx] === 0) {
-            board[idx] = -1
-            squareEls[idx].textContent = "X"
-            if (isWin(turn)) {
-                winner = true
-            }
-            if (winner === false) {turn = 'o'}
-            turnCount++
-            if (turnCount >= 9) {
-                tie = true;
-            }
 
-        } else {
-            console.log('invalid move')
-        }
+    if (winner || tie) {
+        return
     }
+    if (board[idx] !== 0) {
+        console.log('invalid move')
+        return 
+    }
+    
+    if (turn === 'o') {
+        board[idx] = 1
+        squareEls[idx].textContent = "O"
+  
+    } else { //x's turn
+        board[idx] = -1
+        squareEls[idx].textContent = "X"
+    }
+
+    if (isWin(turn)) {
+        winner = true
+    }
+
+    turnCount++
+    if (turnCount >= 9) {
+        tie = true;
+    }
+
+    if (turn === 'o') {
+        turn = 'x'
+    } else {
+        turn = 'o'
+    }
+
+    //! The turns have flipped!
     if (winner === true) {
-        if (turn === 'x') {
+        if (turn === 'o') {
             messageEL.textContent = "X wins!"
         } else {
             messageEL.textContent = "O wins!"
         }
-    }
-    if (tie === true && winner === false) {
-        messageEL.textContent = "Tie Game! Reset to play again."
+        return
     }
 
-    if (tie === false && winner === false) {
-        if (turn === 'x') {
-            messageEL.textContent = "X's turn";
-        } else {
-            messageEL.textContent = "O's turn";
-        }
+    if (tie === true) {
+        messageEL.textContent = "Tie Game! Reset to play again."
+        return
+    }
+
+    if (turn === 'x') {
+        messageEL.textContent = "X's turn";
+    } else {
+        messageEL.textContent = "O's turn";
     }
 }
 
