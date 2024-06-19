@@ -32,14 +32,14 @@ const resetBtnEl = document.querySelector('#reset')
 /*-------------------------------- Functions --------------------------------*/
 const response = (element) => {
     idx = Number(element.target.id)
-    if (turn === 'o') {
+    if (turn === 'o' && winner === false && tie === false) {
         if (board[idx] === 0) {
             board[idx] = 1
             squareEls[idx].textContent = "O"
             if (isWin(turn)) {
                 winner = true
             }
-            turn = 'x'
+            if (winner === false) {turn = 'x'}
             turnCount++;
             if (turnCount >= 9) {
                 tie = true;
@@ -48,14 +48,14 @@ const response = (element) => {
             console.log('invalid move')
         }
   
-    } else { //x's turn
+    } else if (turn === 'x' && winner === false && tie === false){ //x's turn
         if (board[idx] === 0) {
             board[idx] = -1
             squareEls[idx].textContent = "X"
             if (isWin(turn)) {
                 winner = true
             }
-            turn = 'o'
+            if (winner === false) {turn = 'o'}
             turnCount++
             if (turnCount >= 9) {
                 tie = true;
@@ -67,13 +67,10 @@ const response = (element) => {
     }
     if (winner === true) {
         if (turn === 'x') {
-            turn = 'o'
-            messageEL.textContent = "O wins!"
-        } else {
-            turn = 'x'
             messageEL.textContent = "X wins!"
+        } else {
+            messageEL.textContent = "O wins!"
         }
-        console.log(`${turn} wins!`)
     }
     if (tie === true && winner === false) {
         messageEL.textContent = "Tie Game! Reset to play again."
